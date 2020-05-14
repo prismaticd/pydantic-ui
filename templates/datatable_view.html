@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block additional_head %}
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.4/css/responsive.dataTables.min.css">
+
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/responsive/2.2.4/js/dataTables.responsive.min.js"></script>
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.21/js/dataTables.semanticui.min.js"></script>
+{% endblock %}
+
+{% block content %}
+        <div id="tableDiv"></div>
+        <script>
+            $(document).ready( function () {
+                $.ajax({
+                    "url": '/{{ model }}/list',
+                    "success": function(json) {
+                        var tableHeaders = "";
+                        $.each(json.columns, function(i, val){
+                            tableHeaders += "<th>" + val + "</th>";
+                        });
+                        $("#tableDiv").empty();
+                        $("#tableDiv").append(
+                            '<table id="displayTable" class="ui celled table" style="width:100%">' +
+                            '   <thead><tr>' + tableHeaders + '</tr></thead>' +
+                            '</table>');
+                        $('#displayTable').DataTable({
+                            ordering: true,
+                            ajax: "/{{ model }}/list",
+                            autoWidth: true
+                        });
+                    },
+                    "dataType": "json"
+                });
+            } );
+        </script>
+{% endblock %}

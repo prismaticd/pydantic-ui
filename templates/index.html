@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="model-list">
+    <h1>Available models</h1>
+    {% for model in models %}
+        <h2><a href="/{{ model }}">{{ model }}</a></h2>
+    {% endfor %}
+</div>
+{% endblock %}

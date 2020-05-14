@@ -1,0 +1,6 @@
+fastapi
+pydantic
+aiofiles
+pydantic
+fastapi
+jinja2
