@@ -9,10 +9,21 @@
 <button id="send">Send to FastAPI</button>
 <pre id="result"></pre>
 <script>
+
+JSONEditor.defaults.themes.mytheme = JSONEditor.defaults.themes.barebones.extend({
+  getContainer: function() {
+    const el = this._super()
+    el.classList.add("ui")
+    el.classList.add("form")
+    return el
+  }
+});
+
 const element = document.getElementById('form_holder');
 const editor = new JSONEditor(element, {
     startval: {{ current|safe }},
     schema: {{ schema|safe }},
+    theme: 'mytheme',
     disable_edit_json: true,
     disable_properties: true,
     disable_collapse: true
