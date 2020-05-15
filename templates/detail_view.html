@@ -21,7 +21,7 @@
 
 {% block content %}
     <div class="ui container">
-        <div class="ui">
+        <div>
             <div id="form_holder"></div>
             <button id="send">Send to FastAPI</button>
             <pre id="result"></pre>
@@ -35,6 +35,8 @@
           console.log(el)
           el.classList.add("ui")
           el.classList.add("form")
+          el.classList.add("getContainer")
+
           return el
         }
 
@@ -42,13 +44,14 @@
           const el = super.getFormControl(label, input, description)
           //el.classList.add("inline")
           el.classList.add("field")
+          el.classList.add("getFormControl")
           return el
         }
 
         getIndentedPanel() {
           const el = super.getIndentedPanel();
-          el.style = "padding-left: 5px";
-          el.className = "indented-panel"
+          {#el.style = "padding-left: 5px";#}
+          el.className = "getIndentedPanel"
           return el;
         }
 
@@ -57,6 +60,38 @@
           el.classList.add("ui")
           el.classList.add("small")
           el.classList.add("button")
+          return el
+        }
+
+        getGridRow() {
+          const el = document.createElement('div')
+          el.classList.add('ui')
+          el.classList.add('getGridRow')
+
+          return el
+        }
+
+        getGridColumn() {
+          const el = document.createElement('div')
+          el.classList.add('getGridColumn')
+          return el
+        }
+
+        getGridContainer() {
+          const el = document.createElement('div')
+          el.classList.add('getGridContainer')
+          return el
+        }
+
+        getBlockLinkHolder() {
+          const el = document.createElement('div')
+          el.classList.add('getBlockLinkHolder')
+          return el
+        }
+
+        getLinksHolder() {
+          const el = document.createElement('div')
+          el.classList.add('getLinksHolder')
           return el
         }
       }
@@ -73,7 +108,7 @@
         disable_properties: true,
         disable_collapse: true,
         disable_array_delete_last_row: true,
-        disable_array_delete_all_rows: true,
+        disable_array_delete_all_rows: true
 
       });
       const send_button = document.getElementById('send')
