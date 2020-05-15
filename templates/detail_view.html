@@ -19,9 +19,11 @@
 {% endblock %}
 
 {% block content %}
+    <div class="ui">
 <div id="form_holder"></div>
 <button id="send">Send to FastAPI</button>
 <pre id="result"></pre>
+    </div>
 <script>
 
 class MyTheme extends JSONEditor.defaults.themes.html {
@@ -34,6 +36,7 @@ class MyTheme extends JSONEditor.defaults.themes.html {
    }
    getFormControl(label, input, description) {
     const el = super.getFormControl(label, input, description)
+    //el.classList.add("inline")
     el.classList.add("field")
     return el
    }
@@ -43,6 +46,13 @@ class MyTheme extends JSONEditor.defaults.themes.html {
     el.className = "indented-panel"
     return el;
    }
+  getButton (text, icon, title) {
+    const el = super.getButton(text, icon, title) ;
+    el.classList.add("ui")
+    el.classList.add("small")
+    el.classList.add("button")
+    return el
+  }
 }
 JSONEditor.defaults.themes.mytheme = MyTheme
 
@@ -54,7 +64,10 @@ const editor = new JSONEditor(element, {
     iconlib: 'fontawesome5',
     disable_edit_json: true,
     disable_properties: true,
-    disable_collapse: true
+    disable_collapse: true,
+    disable_array_delete_last_row: true,
+    disable_array_delete_all_rows: true,
+
 });
 const send_button = document.getElementById('send')
 editor.on('ready',() => {
