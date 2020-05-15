@@ -2,10 +2,10 @@
 
 {% block additional_head %}
   <!-- jQuery -->
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+{#  <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>#}
 
   <!-- Bootstrap4 -->
-  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+{#  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">#}
 
   <!-- fontawesome5 -->
   <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.12.1/css/all.css'>
@@ -24,32 +24,34 @@
 <pre id="result"></pre>
 <script>
 
-{#JSONEditor.defaults.themes.mytheme = JSONEditor.defaults.themes.barebones.extend({#}
-{#  getContainer: function() {#}
-{#    const el = this._super()#}
-{#    el.classList.add("ui")#}
-{#    el.classList.add("form")#}
-{#    return el#}
-{#  },#}
-{#  getFormControl: function(label, input, description) {#}
-{#    const el = this._super(label, input, description)#}
-{#    el.classList.add("field")#}
-{#    return el#}
-{#  },#}
-{#getIndentedPanel: function () {#}
-{#    const el = this._super();#}
-{#    el.style = "padding-left: 5px";#}
-{#    el.className = "indented-panel"#}
-{#    return el;#}
-{#},#}
-{##}
-{#});#}
+class MyTheme extends JSONEditor.defaults.themes.html {
+  getContainer() {
+    const el = super.getContainer()
+    console.log(el)
+    el.classList.add("ui")
+    el.classList.add("form")
+    return el
+   }
+   getFormControl(label, input, description) {
+    const el = super.getFormControl(label, input, description)
+    el.classList.add("field")
+    return el
+   }
+   getIndentedPanel(){
+    const el = super.getIndentedPanel();
+    el.style = "padding-left: 5px";
+    el.className = "indented-panel"
+    return el;
+   }
+
+}
+JSONEditor.defaults.themes.mytheme = MyTheme
 
 const element = document.getElementById('form_holder');
 const editor = new JSONEditor(element, {
     startval: {{ current|safe }},
     schema: {{ schema|safe }},
-    theme: 'bootstrap4',
+    theme: 'mytheme',
     iconlib: 'fontawesome5',
     disable_edit_json: true,
     disable_properties: true,
