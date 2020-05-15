@@ -39,13 +39,14 @@ async def model_detail(request: Request, model: str, obj_id: str):
     for current_obj in data:
         current_obj_id = getattr(current_obj, klass.id_field())
         if str(current_obj_id) == obj_id:
+            schema = current_obj.schema()
             return templates.TemplateResponse(
                 "detail_view.html",
                 {
                     "request": request,
                     "id": obj_id,
-                    "current": current_obj.json(),
-                    "schema": current_obj.schema_json(),
+                    "current": current_obj.json(indent=2),
+                    "schema": current_obj.to_json_editor_representation(indent=2),
                 },
             )
 

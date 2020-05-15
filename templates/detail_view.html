@@ -1,7 +1,21 @@
 {% extends 'base.html' %}
 
 {% block additional_head %}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/json-editor/0.7.28/jsoneditor.min.js" integrity="sha256-51+oMmpgSgS4jV5/DcGKnDHIOL6Jeie2i7ka6sPQVro=" crossorigin="anonymous"></script>
+  <!-- jQuery -->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+  <!-- Bootstrap4 -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+  <!-- fontawesome5 -->
+  <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.12.1/css/all.css'>
+
+  <!-- Flatpickr -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr@4.6.3/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.3/dist/flatpickr.min.js" integrity="sha256-/irFIZmSo2CKXJ4rxHWfrI+yGJuI16Z005X/bENdpTY=" crossorigin="anonymous"></script>
+
+  <!-- JSON-Editor -->
+  <script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.min.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -10,32 +24,33 @@
 <pre id="result"></pre>
 <script>
 
-JSONEditor.defaults.themes.mytheme = JSONEditor.defaults.themes.barebones.extend({
-  getContainer: function() {
-    const el = this._super()
-    el.classList.add("ui")
-    el.classList.add("form")
-    return el
-  },
-  getFormControl: function(label, input, description) {
-    const el = this._super(label, input, description)
-    el.classList.add("field")
-    return el
-  },
-getIndentedPanel: function () {
-    const el = this._super();
-    el.style = "padding-left: 5px";
-    el.className = "indented-panel"
-    return el;
-},
-
-});
+{#JSONEditor.defaults.themes.mytheme = JSONEditor.defaults.themes.barebones.extend({#}
+{#  getContainer: function() {#}
+{#    const el = this._super()#}
+{#    el.classList.add("ui")#}
+{#    el.classList.add("form")#}
+{#    return el#}
+{#  },#}
+{#  getFormControl: function(label, input, description) {#}
+{#    const el = this._super(label, input, description)#}
+{#    el.classList.add("field")#}
+{#    return el#}
+{#  },#}
+{#getIndentedPanel: function () {#}
+{#    const el = this._super();#}
+{#    el.style = "padding-left: 5px";#}
+{#    el.className = "indented-panel"#}
+{#    return el;#}
+{#},#}
+{##}
+{#});#}
 
 const element = document.getElementById('form_holder');
 const editor = new JSONEditor(element, {
     startval: {{ current|safe }},
     schema: {{ schema|safe }},
-    theme: 'mytheme',
+    theme: 'bootstrap4',
+    iconlib: 'fontawesome5',
     disable_edit_json: true,
     disable_properties: true,
     disable_collapse: true
