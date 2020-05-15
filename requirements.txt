@@ -4,3 +4,16 @@ aiofiles
 pydantic
 fastapi
 jinja2
+
+pytest >= 5.4.1
+black >=19.0.0b0
+pytest-cov
+flake8 >= 3.7.9
+pre-commit >= 2.3.0
+isort
+seed-isort-config
+
+flake8-print  # Forbid print statement in code use logging. instead
+pandas-vet  # Flake8 good practice for pandas
+flake8-bugbear  # Catch common errors
+flake8-printf-formatting  # forbid %s use fstring instead

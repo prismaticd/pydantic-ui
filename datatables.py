@@ -1,7 +1,7 @@
 import json
-from pydantic import BaseModel
-
 from datetime import datetime
+
+from pydantic import BaseModel
 
 
 class DataTableModel(BaseModel):
@@ -24,10 +24,7 @@ class DataTableModel(BaseModel):
 
     @classmethod
     def to_datatables(cls, object_list: list):
-        return {
-            "columns": cls._datatable_headers(),
-            "data": [d.to_datatable_row() for d in object_list]
-        }
+        return {"columns": cls._datatable_headers(), "data": [d.to_datatable_row() for d in object_list]}
 
     def to_json_editor_representation(self, **kwargs):
         schema = self.schema()
@@ -38,10 +35,6 @@ class DataTableModel(BaseModel):
                 properties[field]["format"] = "datetime-local"
                 properties[field]["options"] = {
                     "grid_columns": 4,
-                    "flatpickr": {
-                        "wrap": True,
-                        "time_24hr": True,
-                        "allowInput": True
-                    }
+                    "flatpickr": {"wrap": True, "time_24hr": True, "allowInput": True},
                 }
-        return json.dumps(schema, indent=kwargs.get('indent', None))
+        return json.dumps(schema, indent=kwargs.get("indent", None))

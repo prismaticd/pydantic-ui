@@ -1,0 +1,36 @@
+[tool.coverage.run]
+branch = true
+source = [""]
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 90
+
+[tool.black]
+line-length = 120
+target-version=["py37", ]
+include = '\.pyi?$'
+# see help text for default exclude
+exclude = '''/(
+    # black defaults from --help (see also https://github.com/ambv/black#configuration-format )
+      \.git
+    | \.hg
+    | \.mypy_cache
+    | \.nox
+    | \.tox
+    | \.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+
+    # project specific exclusions
+    | node_modules
+)/
+'''
+
+[tool.isort]
+line_length = 120
+skip = ["node_modules", "migrations"]
+# run seed-isort-config to populate the known_third_party
+known_third_party = ["fastapi", "pydantic"]

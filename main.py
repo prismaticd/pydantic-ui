@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.templating import Jinja2Templates
+
 from models import MODEL_CONFIG
 
 app = FastAPI()
@@ -39,7 +40,6 @@ async def model_detail(request: Request, model: str, obj_id: str):
     for current_obj in data:
         current_obj_id = getattr(current_obj, klass.id_field())
         if str(current_obj_id) == obj_id:
-            schema = current_obj.schema()
             return templates.TemplateResponse(
                 "detail_view.html",
                 {
@@ -57,7 +57,6 @@ async def model_detail(request: Request, model: str, obj_id: str):
 async def edit_item(request: Request, model: str, obj_id: str, data: dict):
     klass, _ = get_model_config(model)
     obj = klass(**data)
-    print("RECEIVED POST:", obj)
     return obj
 
 
