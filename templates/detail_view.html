@@ -28,11 +28,13 @@
 {% endblock %}
 
 {% block content %}
-    <div id="form_holder"></div>
-    <div id="autocomplete" class="autocomplete">
-        <input class="autocomplete-input" />
-    <ul class="autocomplete-result-list"></ul>
-</div>
+    <div class="ui container">
+        <div>
+            <div id="form_holder"></div>
+            <button id="send">Send to FastAPI</button>
+            <pre id="result"></pre>
+        </div>
+    </div>
     <button id="send">Send to FastAPI</button>
     <pre id="result"></pre>
     <script>
