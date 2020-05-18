@@ -107,6 +107,7 @@ def get_beers() -> List[Beer]:
 class Brewery(DataTableModel):
     id: int
     name: str
+    related_wikipedia_title: str = None
     brewery_type: str
     street: str
     city: str
@@ -137,7 +138,7 @@ class Brewery(DataTableModel):
 
     @classmethod
     def autocomplete_fields(cls):
-        return {"name"}
+        return {"related_wikipedia_title"}
 
 
 def get_breweries() -> List[Brewery]:

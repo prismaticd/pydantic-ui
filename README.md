@@ -23,14 +23,14 @@ class MyModelClassName(DataTableModel):
         return {"name"}  # the name field is autocompleted
 ```
 
-Now, some static JS is expected at the location: `static/js/{model_class_name}/{model_field_name}.js`. In our case, our model class is `MyModelClassName` and field is `name`, so our javascript must be located at `static/js/MyModelClassName/name.js`.
+Now, some static JS is expected at the location: `static/js/{model_class_name}/{model_field_name}.js`. In our case, our model class is `MyModelClassName` and field is `name`, so our javascript must be located at `static/js/MyModelClassName/related_wikipedia_title.js`.
 
 The contents of the javascript must be a variable referencing an associative array, that must have at least one key - `search`. The value of which is a function that returns search results based on a search parameter. Let's create a very simple function that returns a few names to choose from.
 
 The name of the variable holding the array is important, as it must be unique. The function name must be `{model_class_name}_{model_field_name}_search`. All lower case.
 
 ```javascript
-// contents of static/js/MyModelClassName/name.js
+// contents of static/js/MyModelClassName/related_wikipedia_title.js
 const mymodelclassname_name_search = {
     "search": (parameter) => {
         const possibleResults = [
