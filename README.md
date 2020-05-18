@@ -7,7 +7,7 @@ Pydantic UI is a way to see and edit your Pydantic models using auto generated f
 [JSON Editor](https://github.com/json-editor/json-editor): JSON Editor takes a JSON Schema and uses it to generate an HTML form.
 
 
-### How to use Autocomplete on a model
+# Autocomplete Fields
 
 Define a model with an autocomplete field
 ```python
