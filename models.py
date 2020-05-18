@@ -135,6 +135,10 @@ class Brewery(DataTableModel):
             return f"<a href='http://127.0.0.1:8000/{self.__class__.__name__}/{value}'>{value}</a>"
         return value
 
+    @classmethod
+    def autocomplete_fields(cls):
+        return {"name"}
+
 
 def get_breweries() -> List[Brewery]:
     p = pathlib.Path("fixtures/breweries.json")

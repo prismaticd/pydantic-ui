@@ -15,20 +15,27 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.3/dist/flatpickr.min.js"
             integrity="sha256-/irFIZmSo2CKXJ4rxHWfrI+yGJuI16Z005X/bENdpTY=" crossorigin="anonymous"></script>
 
+    <!-- Autocomplete -->
+    <script src="https://unpkg.com/@trevoreyre/autocomplete-js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/@trevoreyre/autocomplete-js/dist/style.css"/>
+
     <!-- JSON-Editor -->
     <script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.min.js"></script>
+
+    {% for autocomplete_url in autocomplete %}
+        <script src="{{ autocomplete_url }}"></script>
+    {% endfor %}
 {% endblock %}
 
 {% block content %}
-    <div class="ui container">
-        <div>
-            <div id="form_holder"></div>
-            <button id="send">Send to FastAPI</button>
-            <pre id="result"></pre>
-        </div>
-    </div>
+    <div id="form_holder"></div>
+    <div id="autocomplete" class="autocomplete">
+        <input class="autocomplete-input" />
+    <ul class="autocomplete-result-list"></ul>
+</div>
+    <button id="send">Send to FastAPI</button>
+    <pre id="result"></pre>
     <script>
-
       class MyTheme extends JSONEditor.defaults.themes.html {
         getContainer() {
           const el = super.getContainer()
@@ -96,33 +103,41 @@
         }
       }
 
-      JSONEditor.defaults.themes.mytheme = MyTheme
+        JSONEditor.defaults.themes.mytheme = MyTheme
 
-      const element = document.getElementById('form_holder');
-      const editor = new JSONEditor(element, {
-        startval: {{ current|safe }},
-        schema: {{ schema|safe }},
-        theme: 'mytheme',
-        iconlib: 'fontawesome5',
-        disable_edit_json: true,
-        disable_properties: true,
-        disable_collapse: true,
-        disable_array_delete_last_row: true,
-        disable_array_delete_all_rows: true
+        // Initialise autocomplete javascript. Must be function with name "{className}_{fieldName}_search"
+        const className = "{{ class_name }}".toLowerCase();
+        let schema = {{ schema|safe }};
+        const properties = schema.properties;
+        for(const prop in properties){
+            const element = properties[prop]
+            if(element.format == "autocomplete") {
+                element["options"]["autocomplete"] = eval(`${className}_${prop}_search`)
+            }
+        };
 
-      });
-      const send_button = document.getElementById('send')
-      editor.on('ready', () => {
-        editor.validate();
-        send_button.addEventListener('click', async () => {
-          const res = await fetch('', {method: 'POST', body: JSON.stringify(editor.getValue())})
-          result.textContent = (await res.json()).data
-        })
-      });
-      editor.on('change', () => {
-        const result = document.getElementById('result');
-        result.textContent = JSON.stringify(editor.getValue(), "", 2)
-      });
+        const element = document.getElementById('form_holder');
+        const editor = new JSONEditor(element, {
+            startval: {{ current|safe }},
+            schema: schema,
+            theme: 'mytheme',
+            iconlib: 'fontawesome5',
+            disable_edit_json: true,
+            disable_properties: true,
+            disable_collapse: true,
+        });
+        const send_button = document.getElementById('send')
+        editor.on('ready', () => {
+            editor.validate();
+            send_button.addEventListener('click', async () => {
+                const res = await fetch('', {method: 'POST', body: JSON.stringify(editor.getValue())})
+                result.textContent = (await res.json()).data
+            })
+        });
+        editor.on('change', () => {
+            const result = document.getElementById('result');
+            result.textContent = JSON.stringify(editor.getValue(), "", 2)
+        });
     </script>
 
 {% endblock %}

@@ -1,9 +1,10 @@
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.templating import Jinja2Templates
-
+from fastapi.staticfiles import StaticFiles
 from models import MODEL_CONFIG
 
 app = FastAPI()
+app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
 
@@ -45,8 +46,10 @@ async def model_detail(request: Request, model: str, obj_id: str):
                 {
                     "request": request,
                     "id": obj_id,
+                    "class_name": klass.__name__,
                     "current": current_obj.json(indent=2),
                     "schema": current_obj.to_json_editor_representation(indent=2),
+                    "autocomplete": klass.all_js_autocomplete_function_paths(),
                 },
             )
 
