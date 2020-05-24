@@ -1,7 +1,7 @@
 const wikiUrl = 'https://en.wikipedia.org'
 const params = 'action=query&list=search&format=json&origin=*'
 
-const brewery_name_search = {
+const brewery_related_wikipedia_title_search = {
     "search": (input) => {
         const url = `${wikiUrl}/w/api.php?${
             params
