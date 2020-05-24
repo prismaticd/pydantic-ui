@@ -23,4 +23,3 @@ const brewery_name_search = {
         return result.title;
     }
 }
-

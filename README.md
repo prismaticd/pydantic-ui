@@ -42,7 +42,7 @@ const mymodelclassname_name_search = {
         const searchLower = parameter.toLowerCase();
         const results = possibleResults.filter(possible => possible.toLowerCase().includes(searchLower))
         return results;
-    } 
+    }
 }
 ```
 

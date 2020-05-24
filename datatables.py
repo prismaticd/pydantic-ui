@@ -1,12 +1,13 @@
 import json
 from datetime import datetime
+
+from pydantic import BaseModel
+
 from utils import datetime_schema_field
 
 SCHEMA_TYPE_FUNCTION_MAP = {
     datetime: datetime_schema_field,
 }
-
-from pydantic import BaseModel
 
 
 class DataTableModel(BaseModel):

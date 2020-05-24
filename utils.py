@@ -7,9 +7,5 @@ def datetime_schema_field(existing_schema_element: dict) -> dict:
     if "options" not in updated_schema_element:
         updated_schema_element["options"] = {}
     options = updated_schema_element["options"]
-    options.update({"grid_columns": 4, "flatpickr": {
-        "wrap": True,
-        "time_24hr": True,
-        "allowInput": True
-    }})
+    options.update({"grid_columns": 4, "flatpickr": {"wrap": True, "time_24hr": True, "allowInput": True}})
     return updated_schema_element

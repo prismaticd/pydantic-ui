@@ -150,4 +150,53 @@ def get_breweries() -> List[Brewery]:
     return brew_list
 
 
-MODEL_CONFIG = {"Brewery": {"class": Brewery, "data": get_breweries()}, "Beer": {"class": Beer, "data": get_beers()}}
+class UIModel:
+    __registered_models = []
+
+    kind: BaseModel.__class__
+
+    def __init_subclass__(cls, **kwargs):
+        super().__init_subclass__(**kwargs)
+        cls.__registered_models.append(cls)
+
+    @classmethod
+    def get_registered_models(cls):
+        return cls.__registered_models
+
+
+class PydanticUI:
+    registered_models: List[UIModel]
+    theme: str
+
+    def __init__(self):
+        self.registered_models = UIModel.get_registered_models()
+
+    def list_models(self):
+        return self.registered_models
+
+    def get_models_name(self):
+        return [model.__name__ for model in self.registered_models]
+
+    def get_model_by_name(self, name: str) -> UIModel:
+        for model in self.registered_models:
+            if model.__name__ == name:
+                return model
+
+
+class BeerUI(UIModel, DataTableModel):
+    kind = Beer
+
+    @classmethod
+    def get_all_data(cls):
+        return get_beers()
+
+
+class BreweryUI(UIModel, DataTableModel):
+    kind = Brewery
+
+    @classmethod
+    def get_all_data(cls):
+        return get_breweries()
+
+
+PYDANTIC_UI = PydanticUI()

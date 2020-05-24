@@ -1,7 +1,8 @@
 from fastapi import FastAPI, HTTPException, Request
-from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
-from models import MODEL_CONFIG
+from fastapi.templating import Jinja2Templates
+
+from models import PYDANTIC_UI
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -9,15 +10,16 @@ templates = Jinja2Templates(directory="templates")
 
 
 def get_model_config(model: str):
-    klass = MODEL_CONFIG[model]["class"]
-    data = MODEL_CONFIG[model]["data"]
+
+    klass = PYDANTIC_UI.get_model_by_name(model)
+    data = klass.get_all_data()
     return klass, data
 
 
 @app.get("/")
 async def available_models(request: Request):
     """List all the available model pages"""
-    model_names = MODEL_CONFIG.keys()
+    model_names = PYDANTIC_UI.get_models_name()
     return templates.TemplateResponse("index.html", {"request": request, "models": model_names})
 
 
