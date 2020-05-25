@@ -2,7 +2,7 @@ import datetime
 import enum
 import json
 import pathlib
-from typing import List
+from typing import List, Set
 
 from pydantic import BaseModel
 
@@ -152,11 +152,11 @@ class BeerUI(UIModel, DataTableModel):
     kind = Beer
 
     @classmethod
-    def id_field(cls):
+    def id_field(cls) -> str:
         return "id"
 
     @classmethod
-    def get_all_data(cls):
+    def get_all_data(cls) -> List[Beer]:
         return get_beers()
 
 
@@ -164,15 +164,15 @@ class BreweryUI(UIModel, DataTableModel):
     kind = Brewery
 
     @classmethod
-    def id_field(cls):
+    def id_field(cls) -> str:
         return "id"
 
     @classmethod
-    def get_all_data(cls):
+    def get_all_data(cls) -> List[Brewery]:
         return get_breweries()
 
     @classmethod
-    def autocomplete_fields(cls):
+    def autocomplete_fields(cls) -> Set[str]:
         return {"related_wikipedia_title"}
 
 
