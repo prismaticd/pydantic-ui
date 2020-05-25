@@ -43,7 +43,7 @@ async def model_detail(request: Request, model: str, obj_id: str):
                     "id": obj_id,
                     "class_name": klass.__name__,
                     "current": current_obj.json(indent=2),
-                    "schema": current_obj.to_json_editor_representation(indent=2),
+                    "schema": klass.to_json_editor_representation(current_obj, indent=2),
                     "autocomplete": klass.all_js_autocomplete_function_paths(),
                 },
             )
@@ -54,7 +54,7 @@ async def model_detail(request: Request, model: str, obj_id: str):
 @app.post("/{model}/{obj_id}/")
 async def edit_item(request: Request, model: str, obj_id: str, data: dict):
     klass = PYDANTIC_UI.get_model_by_name(model)
-    obj = klass(**data)
+    obj = klass.kind(**data)
     return obj
 
 

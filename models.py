@@ -54,23 +54,7 @@ class Ingredients(BaseModel):
     yeast: str
 
 
-class Beer(DataTableModel):
-    def get_json(self):
-        return json.dumps(self.get_dict())
-
-    def get_values(self):
-        return self.get_dict().to_array()
-
-    @classmethod
-    def id_field(cls):
-        return "id"
-
-    def format_field_for_datatable(self, field):
-        value = self.get_field_value(field)
-        if field == "id":
-            return f"<a href='http://127.0.0.1:8000/{self.__class__.__name__}/{value}'>{value}</a>"
-        return value
-
+class Beer(BaseModel):
     id: int
     name: str
     tagline: str
@@ -104,7 +88,7 @@ def get_beers() -> List[Beer]:
     return beer_list
 
 
-class Brewery(DataTableModel):
+class Brewery(BaseModel):
     id: int
     name: str
     related_wikipedia_title: str = None
@@ -119,26 +103,6 @@ class Brewery(DataTableModel):
     phone: str
     website_url: str
     updated_at: datetime.datetime
-
-    def get_json(self):
-        return json.dumps(self.get_dict())
-
-    def get_values(self):
-        return self.get_dict().to_array()
-
-    @classmethod
-    def id_field(cls):
-        return "id"
-
-    def format_field_for_datatable(self, field):
-        value = self.get_field_value(field)
-        if field == "id":
-            return f"<a href='http://127.0.0.1:8000/{self.__class__.__name__}/{value}'>{value}</a>"
-        return value
-
-    @classmethod
-    def autocomplete_fields(cls):
-        return {"related_wikipedia_title"}
 
 
 def get_breweries() -> List[Brewery]:
@@ -188,6 +152,10 @@ class BeerUI(UIModel, DataTableModel):
     kind = Beer
 
     @classmethod
+    def id_field(cls):
+        return "id"
+
+    @classmethod
     def get_all_data(cls):
         return get_beers()
 
@@ -196,8 +164,16 @@ class BreweryUI(UIModel, DataTableModel):
     kind = Brewery
 
     @classmethod
+    def id_field(cls):
+        return "id"
+
+    @classmethod
     def get_all_data(cls):
         return get_breweries()
+
+    @classmethod
+    def autocomplete_fields(cls):
+        return {"related_wikipedia_title"}
 
 
 PYDANTIC_UI = PydanticUI()

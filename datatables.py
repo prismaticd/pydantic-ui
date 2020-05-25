@@ -10,27 +10,29 @@ SCHEMA_TYPE_FUNCTION_MAP = {
 }
 
 
-class DataTableModel(BaseModel):
+class DataTableModel:
     @classmethod
     def id_field(cls):
         raise NotImplementedError(f"ID field not implemented in {cls.__name__}")
 
     @classmethod
     def _datatable_headers(cls):
-        return list(cls.__fields__)
+        return list(cls.kind.__fields__)
 
-    def to_datatable_row(self):
-        return [self.format_field_for_datatable(field) for field in self._datatable_headers()]
+    @classmethod
+    def to_datatable_row(cls, object):
+        return [cls.format_field_for_datatable(object, field) for field in cls._datatable_headers()]
 
-    def format_field_for_datatable(self, field_name):
-        return self.get_field_value(field_name)
-
-    def get_field_value(self, field):
-        return getattr(self, field)
+    @classmethod
+    def format_field_for_datatable(cls, object, field_name):
+        value = getattr(object, field_name)
+        if field_name == cls.id_field():
+            return f"<a href='http://127.0.0.1:8000/{cls.__name__}/{value}'>{value}</a>"
+        return value
 
     @classmethod
     def to_datatables(cls, object_list: list):
-        return {"columns": cls._datatable_headers(), "data": [d.to_datatable_row() for d in object_list]}
+        return {"columns": cls._datatable_headers(), "data": [cls.to_datatable_row(d) for d in object_list]}
 
     @classmethod
     def autocomplete_fields(cls):
@@ -43,11 +45,12 @@ class DataTableModel(BaseModel):
     def all_js_autocomplete_function_paths(cls):
         return [f"/static/js/{cls.__name__}/{field}.js" for field in cls.autocomplete_fields()]
 
-    def to_json_editor_representation(self, **kwargs):
-        schema = self.schema()
-        autocomplete_fields = self.autocomplete_fields()
+    @classmethod
+    def to_json_editor_representation(cls, object, **kwargs):
+        schema = object.schema()
+        autocomplete_fields = cls.autocomplete_fields()
         properties = schema["properties"]
-        for field, model_field in self.__fields__.items():
+        for field, model_field in object.__fields__.items():
             if field in autocomplete_fields:
                 properties[field]["format"] = "autocomplete"
                 properties[field]["options"] = {"autocomplete": None}
