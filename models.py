@@ -188,7 +188,7 @@ class BeerUI(UIModel, DataTableModel):
     kind = Beer
 
     @classmethod
-    def get_all_data(cls):
+    def get_all_data(cls) -> List[Beer]:
         return get_beers()
 
 
@@ -196,7 +196,7 @@ class BreweryUI(UIModel, DataTableModel):
     kind = Brewery
 
     @classmethod
-    def get_all_data(cls):
+    def get_all_data(cls) -> List[Brewery]:
         return get_breweries()
 
 
