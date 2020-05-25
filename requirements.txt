@@ -4,6 +4,7 @@ aiofiles
 pydantic
 fastapi
 jinja2
+mypy
 
 pytest >= 5.4.1
 black >=19.0.0b0

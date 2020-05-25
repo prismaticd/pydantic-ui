@@ -1,9 +1,11 @@
 import json
 from datetime import datetime
-from typing import List, Set, Dict, Any
+from typing import Any, Dict, List, Set, Type
 
+from pydantic import BaseModel
+
+from pydantic_ui.models import UIModel
 from pydantic_ui.utils import datetime_schema_field
-
 
 SCHEMA_TYPE_FUNCTION_MAP = {
     datetime: datetime_schema_field,
@@ -11,6 +13,8 @@ SCHEMA_TYPE_FUNCTION_MAP = {
 
 
 class DataTableModel:
+    kind: Type[BaseModel]
+
     @classmethod
     def id_field(cls) -> str:
         raise NotImplementedError(f"ID field not implemented in {cls.__name__}")
@@ -20,18 +24,18 @@ class DataTableModel:
         return list(cls.kind.__fields__)
 
     @classmethod
-    def to_datatable_row(cls, obj) -> List[Any]:
+    def to_datatable_row(cls, obj: UIModel) -> List[Any]:
         return [cls.format_field_for_datatable(obj, field) for field in cls._datatable_headers()]
 
     @classmethod
-    def format_field_for_datatable(cls, obj, field_name) -> Any:
+    def format_field_for_datatable(cls, obj: UIModel, field_name: str) -> Any:
         value = getattr(obj, field_name)
         if field_name == cls.id_field():
             return f"<a href='http://127.0.0.1:8000/{cls.__name__}/{value}'>{value}</a>"
         return value
 
     @classmethod
-    def to_datatables(cls, object_list: list) -> Dict[str, List]:
+    def to_datatables(cls, object_list: List[UIModel]) -> Dict[str, List]:
         return {"columns": cls._datatable_headers(), "data": [cls.to_datatable_row(d) for d in object_list]}
 
     @classmethod
@@ -46,7 +50,7 @@ class DataTableModel:
         return [f"/static/js/{cls.__name__}/{field}.js" for field in cls.autocomplete_fields()]
 
     @classmethod
-    def to_json_editor_representation(cls, **kwargs) -> str:
+    def to_json_editor_representation(cls, indent: int = None) -> str:
         klass = cls.kind
         schema = klass.schema()
         autocomplete_fields = cls.autocomplete_fields()
@@ -59,4 +63,4 @@ class DataTableModel:
             if convert_function is not None:
                 updated_element = convert_function(properties[field])
                 properties[field].update(updated_element)
-        return json.dumps(schema, **kwargs)
+        return json.dumps(schema, indent=indent)
