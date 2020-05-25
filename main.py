@@ -6,7 +6,7 @@ from pydantic_uis import PYDANTIC_UI
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
-templates = Jinja2Templates(directory="templates")
+templates = Jinja2Templates(directory="pydantic_ui/templates")
 
 
 @app.get("/")

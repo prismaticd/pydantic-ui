@@ -2,7 +2,7 @@ import json
 from datetime import datetime
 from typing import List, Set, Dict, Any
 
-from utils import datetime_schema_field
+from pydantic_ui.utils import datetime_schema_field
 
 
 SCHEMA_TYPE_FUNCTION_MAP = {
