@@ -45,11 +45,12 @@ class DataTableModel:
         return [f"/static/js/{cls.__name__}/{field}.js" for field in cls.autocomplete_fields()]
 
     @classmethod
-    def to_json_editor_representation(cls, obj, **kwargs) -> str:
-        schema = obj.schema()
+    def to_json_editor_representation(cls, **kwargs) -> str:
+        klass = cls.kind
+        schema = klass.schema()
         autocomplete_fields = cls.autocomplete_fields()
         properties = schema["properties"]
-        for field, model_field in obj.__fields__.items():
+        for field, model_field in klass.__fields__.items():
             if field in autocomplete_fields:
                 properties[field]["format"] = "autocomplete"
                 properties[field]["options"] = {"autocomplete": None}
@@ -57,4 +58,4 @@ class DataTableModel:
             if convert_function is not None:
                 updated_element = convert_function(properties[field])
                 properties[field].update(updated_element)
-        return json.dumps(schema, indent=2)
+        return json.dumps(schema, **kwargs)
