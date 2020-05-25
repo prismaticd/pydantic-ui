@@ -4,6 +4,7 @@ from typing import List, Set, Dict, Any
 
 from utils import datetime_schema_field
 
+
 SCHEMA_TYPE_FUNCTION_MAP = {
     datetime: datetime_schema_field,
 }

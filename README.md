@@ -11,7 +11,7 @@ Pydantic UI is a way to see and edit your Pydantic models using auto generated f
 
 Define a model with an autocomplete field
 ```python
-from datatables import DataTableModel
+from pydantic_ui.datatables import DataTableModel
 
 
 class MyModelClassName(DataTableModel):

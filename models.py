@@ -2,11 +2,9 @@ import datetime
 import enum
 import json
 import pathlib
-from typing import List, Set
+from typing import List
 
 from pydantic import BaseModel
-
-from datatables import DataTableModel
 
 
 class Unit(enum.Enum):
@@ -113,67 +111,3 @@ def get_breweries() -> List[Brewery]:
         brew_list.append(Brewery(**brew_data))
 
     return brew_list
-
-
-class UIModel:
-    __registered_models = []
-
-    kind: BaseModel.__class__
-
-    def __init_subclass__(cls, **kwargs):
-        super().__init_subclass__(**kwargs)
-        cls.__registered_models.append(cls)
-
-    @classmethod
-    def get_registered_models(cls):
-        return cls.__registered_models
-
-
-class PydanticUI:
-    registered_models: List[UIModel]
-    theme: str
-
-    def __init__(self):
-        self.registered_models = UIModel.get_registered_models()
-
-    def list_models(self):
-        return self.registered_models
-
-    def get_models_name(self):
-        return [model.__name__ for model in self.registered_models]
-
-    def get_model_by_name(self, name: str) -> UIModel:
-        for model in self.registered_models:
-            if model.__name__ == name:
-                return model
-
-
-class BeerUI(UIModel, DataTableModel):
-    kind = Beer
-
-    @classmethod
-    def id_field(cls) -> str:
-        return "id"
-
-    @classmethod
-    def get_all_data(cls) -> List[Beer]:
-        return get_beers()
-
-
-class BreweryUI(UIModel, DataTableModel):
-    kind = Brewery
-
-    @classmethod
-    def id_field(cls) -> str:
-        return "id"
-
-    @classmethod
-    def get_all_data(cls) -> List[Brewery]:
-        return get_breweries()
-
-    @classmethod
-    def autocomplete_fields(cls) -> Set[str]:
-        return {"related_wikipedia_title"}
-
-
-PYDANTIC_UI = PydanticUI()
